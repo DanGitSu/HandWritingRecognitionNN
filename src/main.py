@@ -47,10 +47,11 @@ def main():
         )
         model = Model()
         model.createModel()
-        past = model.fit_generator(train_generator, steps_per_epoch=18, epoch=3, validation_data=test_generator,
-                                   validation_steps=18)
+
         pickle.dump(model, open('CNN.sav', 'wb'))
         model = pickle.load(open('CNN.sav', 'rb'))
+
+        model.evaluate(train_generator,test_generator)
 
 
 # def get_result(result): # validation
@@ -62,3 +63,4 @@ def main():
 
 print("Running")
 main()
+print("fit worked")
