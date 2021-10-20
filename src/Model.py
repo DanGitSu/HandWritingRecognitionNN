@@ -4,26 +4,24 @@ from keras.layers import *
 
 
 class Model:
+
+    model = Sequential()
     def createModel(self):
 
-        model = Sequential()
-        model.add(Conv2D(32, (3,3), input_shape=(32,32,3), activation = 'relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.model.add(Conv2D(32, (3, 3), input_shape=(32,32,3), activation = 'relu'))
+        self.model.add(MaxPooling2D(pool_size=(2, 2)))
     
-        model.add(Conv2D(32, (3, 3), activation='relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.model.add(Conv2D(32, (3, 3), activation='relu'))
+        self.model.add(MaxPooling2D(pool_size=(2, 2)))
     
-        model.add(Flatten())
-        model.add(Dense(units=128, activation='relu'))
-        model.add(Dense(units=26, activation='softmax'))
+        self.model.add(Flatten())
+        self.model.add(Dense(units=128, activation='relu'))
+        self.model.add(Dense(units=26, activation='softmax'))
     
-        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
     
-        model.summary()
-    
-    def train(self, train_generator, test_generator):
-        
-        past = self.fit_generator(train_generator, steps_per_epoch = 18, epoch = 3,validation_data=test_generator , validation_steps = 18)
-        
-        return past
-        
+        self.model.summary()
+
+    #training is shit because its not done
+    #need to be able to validate and test the model

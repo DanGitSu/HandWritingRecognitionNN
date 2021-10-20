@@ -3,6 +3,8 @@ from DataLoader import DataLoader
 import pickle
 from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing import image
+from keras.models import Sequential
+from keras.layers import *
 import os
 
 # Could add Validation mode later
@@ -45,10 +47,18 @@ def main():
         )
         model = Model()
         model.createModel()
-        past = model.train(train_generator,test_generator)
+        past = model.fit_generator(train_generator, steps_per_epoch=18, epoch=3, validation_data=test_generator,
+                                   validation_steps=18)
         pickle.dump(model, open('CNN.sav', 'wb'))
         model = pickle.load(open('CNN.sav', 'rb'))
 
-        
+
+# def get_result(result): # validation
+#     if result[0][0] == 1:
+#         return('a')
+#     elif result[0][1] == 1:
+#         return('b')
+#     if
+
 print("Running")
 main()
