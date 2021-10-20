@@ -32,5 +32,9 @@ class Model:
     #     scores = self.model.evaluate(train_generator, test_generator, verbose=0)
     #     print("CNN Error: %.2f%%" % (100 - scores[1] * 100))
 
+    def result(self, test_image):
+        result = self.model.predict(test_image)
+        return result
+
     #training is shit because its not done
     #need to be able to validate and test the model
