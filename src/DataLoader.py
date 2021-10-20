@@ -1,66 +1,29 @@
-
+from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing import image
 
 class DataLoader:
-    
-    
-    def __init__(self, filePath, batchSize, imgSize, maxTextLen):
-        assert filePath[-1] == '/'
 
-        self.dataAugmentation = False
-        self.currIdx = 0
-        self.batchSize = batchSize
-        self.imgSize = imgSize
-        self.samples = []
-        
-        f = open(filePath+'words.txt')
-        chars = set()
-        bad_samples = []
-        bad_samples_reference = ['a01-117-05-02.png', 'r06-022-03-05.png']
-        
-        for line in f:
-            # ignore comment line
-            if not line or line[0] == '#':
-                continue
+    def createData(self, rescale, shear_range, zoom_range, horizontal_flip):
 
-            lineSplit = line.strip().split(' ')
-            assert len(lineSplit) >= 9
+        train_datagen = ImageDataGenerator(rescale, shear_range, zoom_range, horizontal_flip)
 
-            # filename: part1-part2-part3 --> part1/part1-part2/part1-part2-part3.png
-            fileNameSplit = lineSplit[0].split('-')
-            fileName = filePath + 'words/' + fileNameSplit[0] + '/' + fileNameSplit[0] + '-' + fileNameSplit[1] + '/' + \
-                       lineSplit[0] + '.png'
+        test_datagen = ImageDataGenerator(rescale)
 
-            # GT text are columns starting at 9
-            gtText = self.truncateLabel(' '.join(lineSplit[8:]), maxTextLen)
-            chars = chars.union(set(list(gtText)))
+        train_generator = train_datagen.flow_from_directory(
+            directory='data/Training',
+            target_size=(32, 32),
+            batch_size=32,
+            class_mode='categorical'
 
-            # check if image is not empty
-            if not os.path.getsize(fileName):
-                bad_samples.append(lineSplit[0] + '.png')
-                continue
+        )
 
-            # put sample into list
-            self.samples.append(Sample(gtText, fileName))
+        test_generator = test_datagen.flow_from_directory(
+            directory='data/Testing',
+            target_size=(32, 32),
+            batch_size=32,
+            class_mode='categorical'
+        )
 
-            # some images in the IAM dataset are known to be damaged, don't show warning for them
-        if set(bad_samples) != set(bad_samples_reference):
-            print("Warning, damaged images found:", bad_samples)
-            print("Damaged images expected:", bad_samples_reference)
+        output_array = {train_generator, test_generator}
 
-            # split into training and validation set: 95% - 5%
-        splitIdx = int(0.95 * len(self.samples))
-        self.trainSamples = self.samples[:splitIdx]
-        self.validationSamples = self.samples[splitIdx:]
-
-        # put words into lists
-        self.trainWords = [x.gtText for x in self.trainSamples]
-        self.validationWords = [x.gtText for x in self.validationSamples]
-
-        # number of randomly chosen samples per epoch for training 
-        self.numTrainSamplesPerEpoch = 25000
-
-        # start with train set
-        self.trainSet()
-
-        # list of all chars in dataset
-        self.charList = sorted(list(chars))
+        return output_array

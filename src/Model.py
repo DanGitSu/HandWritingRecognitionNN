@@ -1,24 +1,29 @@
-import tensorflow as tf
+import keras
+from keras.models import Sequential
+from keras.layers import *
+
 
 class Model:
+    def createModel(self):
 
-    batchSize = 50
-    imgSize = {128, 32}
-    maxTextLn = 32
-
-    def __init__(self, charList, decoderType=DecoderType.BestPath, mustRestore=False):
-
-        self.charList = charList
-        self.decoderType = decoderType
-        self.mustRestore = mustRestore
-        self.snapID = 0
-
-        # Whether to use normalization over a batch or a population
-        self.is_train = tf.placeholder(tf.bool, name='is_train')
-
-        # input image batch
-        self.inputImgs = tf.placeholder(tf.float32, shape=(None, Model.imgSize[0], Model.imgSize[1]))
-
-        self.setupCNN()
-        self.setupRNN()
-        self.setupCTC()
+        model = Sequential()
+        model.add(Conv2D(32, (3,3), input_shape=(32,32,3), activation = 'relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+    
+        model.add(Conv2D(32, (3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+    
+        model.add(Flatten())
+        model.add(Dense(units=128, activation='relu'))
+        model.add(Dense(units=26, activation='softmax'))
+    
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    
+        model.summary()
+    
+    def train(self, train_generator, test_generator):
+        
+        past = self.fit_generator(train_generator, steps_per_epoch = 18, epoch = 3,validation_data=test_generator , validation_steps = 18)
+        
+        return past
+        
