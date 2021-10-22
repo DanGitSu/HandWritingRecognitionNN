@@ -107,7 +107,7 @@ def main():
         # pickle.dump(model, open('CNN.sav', 'wb'))
         # model = pickle.load(open('CNN.sav', 'rb'))
 
-        filename = r'../data/Testing\a\21.png'
+        filename = r'../data/Testing\a\22.png'
         test_image = image.load_img(filename, target_size=(32, 32))
         # plt.imshow(test_image)
         test_image = image.img_to_array(test_image)

@@ -8,7 +8,7 @@ class Model:
     model = Sequential()
     def createModel(self):
 
-        self.model.add(Conv2D(32, (3, 3), input_shape=(32,32,3), activation = 'relu'))
+        self.model.add(Conv2D(32, (3, 3), input_shape=(32, 32, 3), activation = 'relu'))
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
     
         self.model.add(Conv2D(32, (3, 3), activation='relu'))
@@ -24,8 +24,8 @@ class Model:
         self.model.summary()
 
     def train(self, train_generator, test_generator):
-        past = self.model.fit(train_generator, steps_per_epoch=18, epochs=3, validation_data=test_generator,
-                         validation_steps=18)
+        past = self.model.fit_generator(train_generator, steps_per_epoch=16, epochs=3, validation_data=test_generator,
+                         validation_steps=16)
 
 
     # def evaluate(self,train_generator, test_generator):
