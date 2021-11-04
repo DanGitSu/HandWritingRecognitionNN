@@ -10,11 +10,11 @@ class Model:
 
         self.model.add(Conv2D(32, (3,3), input_shape=(32,32,3), activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2,2)))
-        # self.model.add(BatchNormalization(16))
+        # self.model.add(BatchNormalization(axis=-1))
 
         self.model.add(Conv2D(32, (3,3), activation='relu',))
         self.model.add(MaxPooling2D(pool_size=(2,2)))
-        # self.model.add(BatchNormalization(32))
+        # self.model.add(BatchNormalization(axis=-1))
 
         self.model.add(Flatten())
         self.model.add(Dense(units=128, activation='relu'))
@@ -27,7 +27,9 @@ class Model:
     def train(self, train_generator, test_generator):
         # history = self.model.fit_generator(train_generator, steps_per_epoch=16, epochs=3, validation_data=test_generator,
         #                  validation_steps=16)
-        history = self.model.fit(train_generator, test_generator, steps_per_epoch=30, epochs=30, validation_steps=30)
+        history = self.model.fit(train_generator, steps_per_epoch=16, epochs=3, validation_steps=16, validation_data= test_generator)
+        # scores = self.model.evaluate(train_generator, test_generator, verbose=0)
+        # print("CNN Error: %.2f%%" % (100 - scores[1] * 100))
 
 
     # def evaluate(self,train_generator, test_generator):
