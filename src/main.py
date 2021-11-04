@@ -1,6 +1,7 @@
 from Model import Model
 from DataLoader import DataLoader
 import pickle
+import keras
 from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing import image
 from keras.models import Sequential
@@ -107,15 +108,15 @@ def main():
         # pickle.dump(model, open('CNN.sav', 'wb'))
         # model = pickle.load(open('CNN.sav', 'rb'))
 
-        filename = r'../data/Testing\a\22.png'
+        filename = r'../data/Testing\a\21.png'
         test_image = image.load_img(filename, target_size=(32, 32))
         # plt.imshow(test_image)
-        test_image = image.img_to_array(test_image)
+        #test_image = image.img_to_array(test_image)
         test_image = np.expand_dims(test_image, axis=0)
 
         result = model.result(test_image)
         r = get_result(result)
-        print('Predicted Alphabet is: {}'.format(r))
+        print('Predicted Alphabet is: ', r)
 
 
 
